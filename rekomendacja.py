@@ -2,6 +2,7 @@
 #
 
 from math import sqrt
+import numpy
 
 users = {
         "Ania": 
@@ -47,12 +48,32 @@ def manhattan(rating1, rating2):
     else:
         return -1
 
-def pearson(rating1, rating2):
-    korelacja=0
+def pearson(osoba1, osoba2, slownik):
+    os1 = slownik[osoba1]
+    os2 = slownik[osoba2]
+    sumxy = 0
+    sumx = 0
+    sumy = 0
+    sumx2 = 0
+    sumy2 = 0
+    i = 0
+    for j in os1:
+        for k in os2:
+            if j==k:
+                sumxy = sumxy+os1[j]*os2[j]
+                sumx = sumx+os1[j]
+                sumy = sumy+os2[j]
+                sumx2 = sumx2+os1[j]**2
+                sumy2 = sumy2+os2[j]**2
+                i+=1
+    return (sumxy-(sumx*sumy)/i)/(sqrt(sumx2-(sumx**2)/i)*sqrt(sumy2-(sumy**2)/i))          
     
-    return korelacja
 
-def pearsonNumpy(rating1, rating2):
-    
-    korelacja=0
-    return korelacja
+def pearsonNumpy(osoba1, osoba2):
+    osoba1=osoba1.values()
+    osoba2=osoba2.values()
+    return numpy.corrcoef(osoba1, osoba2)
+
+print(pearson('Ania','Bonia',users))
+print(str(pearsonNumpy(users['Ania'],users['Bonia'])[0,1]))
+
